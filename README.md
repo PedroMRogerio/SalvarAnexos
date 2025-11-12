@@ -96,3 +96,7 @@ Python 3.14
 - docTR (Deep Optical Character Recognition) → OCR em PDFs
 
 - datetime, shutil, os → automação e manipulação de arquivos
+
+Exemplo:
+
+<img width="942" height="240" alt="image" src="https://github.com/user-attachments/assets/31d07933-83a6-43ee-8c4e-9f5f4e6b7326" />
