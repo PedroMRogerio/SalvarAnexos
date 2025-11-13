@@ -89,7 +89,7 @@ C:\temp\Teste\
 
 ## 🧠 Tecnologias usadas
 
-Python 3.14
+Python 3.13
 
 - win32com.client → integração com Microsoft Outlook
 
