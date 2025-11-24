@@ -5,12 +5,29 @@ from datetime import datetime
 from baixarAnexo import download_folder, folder, percorrer_pastas
 from visualizarAnexo import extrair_texto
 
+
+def gerar_nome_unico(destino_dir, base_nome):
+    """
+    base_nome ex: '24112025.pdf'
+    retorna um nome que não existe ainda no destino_dir:
+    '24112025.pdf', '24112025_(1).pdf', '24112025_(2).pdf', ...
+    """
+    nome, ext = os.path.splitext(base_nome)
+    candidato = base_nome
+    i = 1
+    while os.path.exists(os.path.join(destino_dir, candidato)):
+        candidato = f"{nome}_({i}){ext}"
+        i += 1
+    return candidato
+
+
 # Armazena a palavra_alvo no código
 with open("palavra_alvo.txt", "r", encoding="utf-8") as f:
-        PALAVRA_ALVO = [
-            line.strip() for line in f
-            if line.strip() and not line.strip().startswith("#")
-        ]
+    PALAVRA_ALVO = [
+        line.strip() for line in f
+        if line.strip() and not line.strip().startswith("#")
+    ]
+
 
 if __name__ == "__main__":
     percorrer_pastas(folder)
@@ -46,22 +63,23 @@ if __name__ == "__main__":
         # Gera data de hoje no formato DDMMYYYY
         data_hoje = datetime.now().strftime("%d%m%Y")
 
-        # Novo nome
-        novo_nome = f"{data_hoje}.pdf"
-        
-        # Salva os destino
+        # Nome base (vai virar único se já existir)
+        novo_nome_base = f"{data_hoje}.pdf"
+
+        # Define destino
         if palavra_encontrada:
             destino_dir = os.path.join(download_folder, palavra_encontrada)
         else:
             destino_dir = os.path.join(download_folder, "SEM_MATCH")
 
         os.makedirs(destino_dir, exist_ok=True)
+
+        # Gera nome único pra não sobrescrever
+        novo_nome = gerar_nome_unico(destino_dir, novo_nome_base)
         destino_path = os.path.join(destino_dir, novo_nome)
-        
-        # Salva os anexos
+
+        # Move o anexo sem sobrescrever
         try:
-            if os.path.exists(destino_path):
-                os.remove(destino_path)  # Sobrescreve
             shutil.move(pdf_path, destino_path)
             if palavra_encontrada:
                 print(
